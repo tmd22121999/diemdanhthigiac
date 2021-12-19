@@ -2,3 +2,4 @@ Flask==0.11.1
 gunicorn==19.0.0
 opencv-python-headless
 face_recognition
+streamlit-webrtc
