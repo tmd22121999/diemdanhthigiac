@@ -74,11 +74,11 @@ class VideoTransformer(VideoTransformerBase):
 
                 face_names.append(name)
 
-     for name in face_names:
+    for name in face_names:
             attendence_set.add(name)
 
         # Display the results
-     for (top, right, bottom, left), name in zip(face_locations, face_names):
+    for (top, right, bottom, left), name in zip(face_locations, face_names):
             # Scale back up face locations since the frame we detected in was scaled to 1/4 size
             top *= 4
             right *= 4
@@ -96,7 +96,7 @@ class VideoTransformer(VideoTransformerBase):
                         font, 1.0, (255, 255, 255), 1)
 
         # Display the resulting image
-     ret, buffer = cv2.imencode('.jpg', frame)
-     frame = buffer.tobytes()
+    ret, buffer = cv2.imencode('.jpg', frame)
+    frame = buffer.tobytes()
 
-     return frame
+    return frame
