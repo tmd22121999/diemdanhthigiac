@@ -21,7 +21,7 @@ def listen():
 
 
 def main():
-    app.run(port=5000, debug=False)
+    app.run()
 
 
 if __name__ == "__main__":
