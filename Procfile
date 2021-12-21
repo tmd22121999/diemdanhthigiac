@@ -1,1 +1,1 @@
-web: gunicorn app:app && streamlit run /app/.heroku/python/bin/gunicorn
+web: sh setup.sh && streamlit run app.py
