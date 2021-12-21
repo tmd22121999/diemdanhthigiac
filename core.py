@@ -1,5 +1,5 @@
 import cv2
-from imutils.video import VideoStream
+from imutils.video import WebcamVideoStream
 import face_recognition
 import numpy as np
 import os
@@ -10,10 +10,10 @@ import streamlit as st
 st.title("Webcam Live Feed")
 run = st.checkbox('Run')
 FRAME_WINDOW = st.image([])
-camera = VideoStream(src=0).start()
+camera = WebcamVideoStream(src=1).start()
 print(camera)
 while run:
-    _, frame = camera.read()
+    frame = camera.read()
     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     FRAME_WINDOW.image(frame)
 else:
