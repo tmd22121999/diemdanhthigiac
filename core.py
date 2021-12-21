@@ -37,7 +37,6 @@ attendence_set = set()
 
 
 ############## Detect and recognize
-camera = cv2.VideoCapture(0)
 
 
 def generate_frames():
