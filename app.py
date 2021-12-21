@@ -1,23 +1,14 @@
-from flask import Flask, render_template, Response
+import cv2
+import streamlit as st
 
-app = Flask(__name__)
+st.title("Webcam Live Feed")
+run = st.checkbox('Run')
+FRAME_WINDOW = st.image([])
+camera = cv2.VideoCapture(0)
 
-
-@app.route('/')
-def index():
-    return render_template('index.html')
-
-
-
-@app.route('/listen')
-def listen():
-    global count
-    return {"attendence_list": list(attendence_set)}
-
-
-def main():
-    app.run(port=5000, debug=False)
-
-
-if __name__ == "__main__":
-    main()
+while run:
+    _, frame = camera.read()
+    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    FRAME_WINDOW.image(frame)
+else:
+    st.write('Stopped')
