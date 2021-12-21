@@ -1,4 +1,3 @@
-from core import generate_frames, attendence_set, known_face_names
 from flask import Flask, render_template, Response
 
 app = Flask(__name__)
@@ -6,7 +5,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('index.html', known_face_names=known_face_names)
+    return render_template('index.html')
 
 
 
