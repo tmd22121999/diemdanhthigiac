@@ -1,23 +1,11 @@
 import cv2
-from imutils.video import VideoStream
 import face_recognition
 import numpy as np
 import os
 import re
-############
-import streamlit as st
+from streamlit_webrtc import VideoTransformerBase, webrtc_streamer
 
-st.title("Webcam Live Feed")
-run = st.checkbox('Run')
-FRAME_WINDOW = st.image([])
-camera = VideoStream(src=0).start()
-print(camera)
-while run:
-    frame = camera.read()
-    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    FRAME_WINDOW.image(frame)
-else:
-    st.write('Stopped')
+
 ############## Encoding known face
 known_face_encodings = []
 known_face_names = []
@@ -38,29 +26,28 @@ attendence_set = set()
 
 
 ############## Detect and recognize
+class VideoTransformer(VideoTransformerBase):
+ def __init__(self):
+    self.i = 0
 
-
-def generate_frames():
+ def transform(self, frame1):
     # Initialize some variables
     face_locations = []
     face_encodings = []
     face_names = []
     process_this_frame = True
 
-    while True:
+    frame = frame1.to_ndarray(format="bgr24")
         # Grab a single frame of video
-        ret, frame = camera.read()
-        if not ret:
-            break
 
         # Resize frame of video to 1/4 size for faster face recognition processing
-        small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
+    small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
 
         # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
-        rgb_small_frame = small_frame[:, :, ::-1]
+    rgb_small_frame = small_frame[:, :, ::-1]
 
         # Only process every other frame of video to save time
-        if process_this_frame:
+    if process_this_frame:
             # Find all the faces and face encodings in the current frame of video
             face_locations = face_recognition.face_locations(rgb_small_frame)
             face_encodings = face_recognition.face_encodings(
@@ -87,15 +74,11 @@ def generate_frames():
 
                 face_names.append(name)
 
-        process_this_frame = not process_this_frame
-        # process_this_frame = False
-
-        # Add person to attendence set
-        for name in face_names:
+    for name in face_names:
             attendence_set.add(name)
 
         # Display the results
-        for (top, right, bottom, left), name in zip(face_locations, face_names):
+    for (top, right, bottom, left), name in zip(face_locations, face_names):
             # Scale back up face locations since the frame we detected in was scaled to 1/4 size
             top *= 4
             right *= 4
@@ -113,8 +96,7 @@ def generate_frames():
                         font, 1.0, (255, 255, 255), 1)
 
         # Display the resulting image
-        ret, buffer = cv2.imencode('.jpg', frame)
-        frame = buffer.tobytes()
+    ret, buffer = cv2.imencode('.jpg', frame)
+    frame = buffer.tobytes()
 
-        yield(b'--frame\r\n'
-              b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+    return frame
