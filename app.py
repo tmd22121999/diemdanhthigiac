@@ -9,10 +9,6 @@ def index():
     return render_template('index.html', known_face_names=known_face_names)
 
 
-@app.route('/video')
-def video():
-    return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
-
 
 @app.route('/listen')
 def listen():
